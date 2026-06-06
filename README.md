@@ -198,7 +198,7 @@ Connect any SQL client to your Neon database and run the files in the
 
 ## 👤 Author
 
-**[Rishi]**
+**Rishi Patel**
 Aspiring Data Analyst | SQL • Python • Power BI
 📧 codewithrishi01@gmail.com
 🔗 LinkedIn: linkedin.com/in/rishipatel01
