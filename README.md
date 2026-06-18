@@ -25,19 +25,16 @@ Can delay be predicted before departure using only information available ahead o
 
 The project answers all three through a full pipeline: raw data → cloud database → interactive dashboard → statistical analysis → predictive model.
 
-## 🗂️ Phase 1 — Data Setup (Complete)
+## 🗂️ Data Source
 
-### Data Source
-- **Provider:** Bureau of Transportation Statistics (BTS)
-- **Dataset:** On-Time Performance Reporting
-- **URL:** https://www.transtats.bts.gov/DL_SelectFields.aspx
-- **Coverage:** Full year 2025 (January → December)
-- **Raw file size:** ~1.3 GB CSV
-- **Final rows loaded:** 480,000 (stratified sample — 40,000 per month, all 12 months)
+Provider: Bureau of Transportation Statistics (BTS), US Department of Transportation
+Dataset: On-Time Performance Reporting
+URL: https://www.transtats.bts.gov/DL_SelectFields.aspx
+Coverage: Full year 2025 (January–December)
+Raw file size: ~1.3 GB CSV
+Final rows loaded: 480,000 (stratified sample — 40,000 per month, all 12 months represented)
 
-> **Why sampled?** Neon free tier has a 512 MB limit. A balanced monthly
-> sample preserves all seasonal patterns and carrier representation while
-> fitting within cloud constraints — a standard real-world practice.
+Why sampled? Neon's free tier has a 512 MB storage limit. A balanced monthly sample preserves seasonal patterns and carrier representation while fitting cloud constraints — a standard, defensible real-world tradeoff rather than a shortcut.
 
 ---
 
