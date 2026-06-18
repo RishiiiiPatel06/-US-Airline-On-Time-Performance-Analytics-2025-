@@ -109,28 +109,19 @@ NaN delay-cause columns filled with 0, since a null there means "not a contribut
 
 ---
 
-## ✅ Data Quality Results
-
-**File:** `notebooks/02_data_quality.ipynb`
-
-| Check | Result |
-|---|---|| Total flights loaded | 480,000 |
-| Cancelled flights | 7,124 (1.48%) |
-| Diverted flights | 1,317 (0.27%) |
-| Unique carriers | 14 |
-| Unique airports | 351 |
-| Average arrival delay | 16.81 min |
-| Max arrival delay | 3,275 min |
-| Date range | 2025-01-01 → 2025-12-31 |
-| Null values in critical columns | 0 |
-| Duplicate flights | 0 |
-| Flights missing delay record | 0 |
-| All 12 months present | ✅ Yes |
-| Foreign key integrity | ✅ Pass |
-
-> **Note on max delay (3,275 min):** This is ~54 hours — a real edge case
-> in the BTS data, not a data error. These extreme outliers are retained
-> in the dataset and flagged in analysis where relevant.
+✅ Data Quality Results
+| Check |	Result |
+| Total flights loaded |	480,000 |
+| Cancelled flights |	7,124 (1.48%) |
+| Diverted flights |	1,317 (0.27%) |
+| Unique carriers |	14 |
+| Unique airports	| 351 |
+| Average arrival delay |	16.81 min (median 0 min) |
+| Max arrival delay |	3,275 min |
+| Date range |	2025-01-01 → 2025-12-31 |
+| Null values in critical columns |	0 |
+| Duplicate flights |	0 |
+| Foreign key integrity |	✅ Pass | 
 
 ---
 
