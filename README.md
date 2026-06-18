@@ -13,6 +13,17 @@ End-to-end data analytics project on 480,000+ US domestic flight records — fro
 | Phase 5 | GitHub Portfolio | ✅ Complete|
 
 ---
+## 🎯 Business Problem
+
+Flight delays cost airlines, airports, and passengers billions of dollars every year, but the causes are rarely a single factor — weather, air traffic congestion, carrier operations, and aircraft turnaround all interact differently depending on the route, carrier, and time of year. This project asks three practical questions a real airline operations or analytics team would care about:
+
+
+Where and when do delays and cancellations actually happen, and which routes/carriers/airports are the biggest outliers?
+What causes them — is it weather, air traffic control, the carrier itself, or a knock-on effect from a previous late flight?
+Can delay be predicted before departure using only information available ahead of time, and if so, how reliably?
+
+
+The project answers all three through a full pipeline: raw data → cloud database → interactive dashboard → statistical analysis → predictive model.
 
 ## 🗂️ Phase 1 — Data Setup (Complete)
 
