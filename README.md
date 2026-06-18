@@ -231,7 +231,6 @@ US-Airline-On-Time-Performance-Analytics-2025/
 │
 └── results/
     ├── key_insights.md
-    └── resume_bullets.md
 ```
 
 ---
