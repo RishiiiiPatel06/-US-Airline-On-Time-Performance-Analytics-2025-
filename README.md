@@ -109,19 +109,19 @@ NaN delay-cause columns filled with 0, since a null there means "not a contribut
 
 ---
 
-| ✅ Data Quality | Results |
-| Check |	Result |
-| Total flights loaded |	480,000 |
-| Cancelled flights |	7,124 (1.48%) |
-| Diverted flights |	1,317 (0.27%) |
-| Unique carriers |	14 |
-| Unique airports	| 351 |
-| Average arrival delay |	16.81 min (median 0 min) |
-| Max arrival delay |	3,275 min |
-| Date range |	2025-01-01 → 2025-12-31 |
-| Null values in critical columns |	0 |
-| Duplicate flights |	0 |
-| Foreign key integrity |	✅ Pass | 
+| Check | Result |
+|---|---|
+| Total flights loaded | 480,000 |
+| Cancelled flights | 7,124 (1.48%) |
+| Diverted flights | 1,317 (0.27%) |
+| Unique carriers | 14 |
+| Unique airports | 351 |
+| Average arrival delay | 16.81 min (median 0 min) |
+| Max arrival delay | 3,275 min |
+| Date range | 2025-01-01 → 2025-12-31 |
+| Null values in critical columns | 0 |
+| Duplicate flights | 0 |
+| Foreign key integrity | ✅ Pass |
 
 ---
 
