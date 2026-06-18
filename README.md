@@ -79,10 +79,11 @@ AIRPORTS ───────────────────────�
 
 | Tool | Purpose |
 |---|---|
-| Python 3.12 | ETL pipeline |
-| pandas | CSV ingestion and cleaning |
-| SQLAlchemy | Database connection and writes |
-| PostgreSQL (Neon) | Cloud database |
+| Python 3.12 (pandas, scikit-learn, SHAP) | ETL, EDA, Machine learning |
+| SQLAlchemy + psycopg2 | Database connection & writes |
+| PostgreSQL (Neon, serverless) | Cloud data warehouse |
+| SQL | Querying, KPI calculation, optimization |
+| Power BI | 5-page interactive dashboard, DAX measures |
 | Google Colab | Notebook environment |
 | BTS Open Data | Source dataset |
 
