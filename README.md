@@ -1,10 +1,6 @@
-# ✈️ US Airline On-Time Performance Analytics (2025)
+✈️ US Airline On-Time Performance Analytics (2025)
 
-> End-to-end data analytics project on 480,000+ US domestic flight records —
-> from raw CSV ingestion to cloud PostgreSQL, covering delays, cancellations,
-> carrier performance, and airport operations.
-
----
+End-to-end data analytics project on 480,000+ US domestic flight records — from raw CSV ingestion to a cloud PostgreSQL database, a 5-page Power BI dashboard, deep exploratory analysis in Python, and a delay-prediction machine learning model.
 
 ## 📌 Project Status
 
