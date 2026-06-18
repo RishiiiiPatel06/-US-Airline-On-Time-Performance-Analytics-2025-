@@ -109,7 +109,7 @@ NaN delay-cause columns filled with 0, since a null there means "not a contribut
 
 ---
 
-✅ Data Quality Results
+| ✅ Data Quality | Results |
 | Check |	Result |
 | Total flights loaded |	480,000 |
 | Cancelled flights |	7,124 (1.48%) |
