@@ -125,17 +125,84 @@ NaN delay-cause columns filled with 0, since a null there means "not a contribut
 
 ---
 
+## 📊 Power BI Dashboard (5 Pages)
+
+| Page | Focus |
+|---|---|
+| 1. Executive Overview | Headline KPIs — Total Flights, OTP%, Cancellation Rate, Avg Arrival Delay |
+| 2. Route P&L Analysis | Route-level efficiency, delay cost breakdown, quarterly comparison |
+| 3. Flight Delay Intelligence | Delay-cause drivers, rolling trend, geographic delay distribution |
+| 4. Airport Network Performance Map | Busiest airports/states, geographic delay map |
+| 5. Flight Demand Trend Analysis | Seasonal demand, carrier market share, on-time funnel |
+
+Screenshots: [`dashboard/screenshots/`](dashboard/screenshots/)
+
+### Headline Metrics (Page 1 — Executive Overview)
+
+| Metric | Value |
+|---|---|
+| Total Flights | 480K |
+| On-Time Performance (OTP%) | 78.57% |
+| Cancellation Rate | 1.48% |
+| Avg Arrival Delay | 17.06 min |
+
+---
+
+## 🔍 Exploratory Data Analysis (Python)
+
+**File:** `notebooks/03_deep_eda.ipynb`
+
+Key findings from statistical and visual analysis:
+
+- **Delay distribution is extremely right-skewed** (skew ≈ 11.2, kurtosis ≈ 233): median arrival delay is 0 minutes, but the mean (16.8 min) is pulled up by a small tail of severe delays. 63% of flights are on-time/early; only 7.8% are severely delayed (60+ min) — that minority drives most of the total delay cost.
+- **Departure delay and arrival delay correlate at 0.97** — arrival delay is almost entirely inherited from departure delay; aircraft rarely "make up time" in flight.
+- **Carrier delay (0.68 correlation) and late-aircraft delay (0.61) are the two dominant delay drivers** — weather (0.31) and NAS/ATC delay (0.37) matter less, and security delay (0.03) is statistically negligible.
+- **Seasonality is clear in delay and cancellation, even though flight volume is flat:** delays peak in July (summer storms/congestion) and dip in September; cancellations spike in January and November (winter storms, holiday travel).
+- **Weekly pattern:** Sunday has the highest average delay (~21 min); Tuesday the lowest (~13.3 min) — roughly a 60% gap between the best and worst day to fly.
+- **Cancellation causes differ from delay causes:** weather alone accounts for 62.5% of all cancellations, even though it's only a moderate driver of delay minutes — when weather is bad enough, airlines tend to cancel outright rather than absorb the delay.
+- **Carrier "fingerprints" vary:** Hawaiian Airlines' delays are almost entirely self-inflicted (carrier delay), while Spirit's are dominated by air traffic congestion (NAS delay) — likely reflecting differences in route networks.
+
+Full notebook with all visualizations: [`notebooks/03_deep_eda.ipynb`](notebooks/03_deep_eda.ipynb)
+
+---
+
+## 🤖 Machine Learning — Delay Prediction
+
+**File:** `notebooks/04_delay_prediction_model.ipynb`
+
+**Goal:** predict whether a flight will be delayed ≥15 minutes (DOT standard definition), using only features known **before departure** — no departure delay, no actual air time, no delay-cause breakdown. This constraint was deliberate, to avoid data leakage and produce a model that could genuinely be used ahead of a flight.
+
+| Feature | Type |
+|---|---|
+| Carrier, origin, dest | Categorical (encoded) |
+| Distance | Numeric |
+| Month, quarter, day of week, day of month | Time-based |
+| Is_weekend | Engineered |
+| Route / carrier historical delay rate (Bayesian-smoothed) | Engineered |
+
+**Model:** Random Forest Classifier, tuned via `GridSearchCV` (`max_depth=20`, `n_estimators=200`)
+
+| Metric | Result |
+|---|---|
+| Test Accuracy | 74.18% |
+| Precision (Delayed) | 0.39 |
+| Recall (Delayed) | 0.29 |
+| Baseline (predict majority class only) | 77.87% |
+
+**Honest takeaway:** with a strictly leakage-free feature set, accuracy plateaus around 74%, regardless of hyperparameter tuning or additional engineered features (historical delay rates, weekend flag). This indicates that **pre-flight contextual features explain a meaningful but limited share of delay variance** — the remaining variance is likely driven by same-day operational conditions (real-time weather, ATC congestion, aircraft turnaround status) that aren't available as pre-departure signals in this dataset. This is a deliberate, defensible modeling decision rather than a shortfall: a model that used `dep_delay_min` or actual delay-cause columns could trivially exceed 95% accuracy, but would be useless for real-world prediction, since those values aren't known until after the flight is already delayed.
+
+---
+
 ## 📁 Repository Structure
 
 ```
-airline-analytics-p1/
+US-Airline-On-Time-Performance-Analytics-2025/
 │
 ├── README.md
+├── data_source.md
+├── Data_quality_report.md
 │
-├── data/
-│   └── data_source.md           ← BTS download instructions
-│
-├── sql/
+├── SQL/
 │   ├── 01_create_tables.sql
 │   ├── 02_basic_queries.sql
 │   ├── 03_window_functions.sql
@@ -145,15 +212,22 @@ airline-analytics-p1/
 │
 ├── notebooks/
 │   ├── 01_etl_pipeline.ipynb
-│   └── 02_data_quality.ipynb
+│   ├── 02_data_quality.ipynb
+│   ├── 03_deep_eda.ipynb
+│   └── 04_delay_prediction_model.ipynb
 │
-├── dashboard/
+├── Dashboard/
 │   └── screenshots/
+│       ├── 01_executive_overview.png
+│       ├── 02_route_pl_analysis.png
+│       ├── 03_flight_delay_intelligence.png
+│       ├── 04_airport_network_map.png
+│       └── 05_demand_trend_analysis.png
 │
 ├── docs/
+│   ├── architecture_diagram.md
 │   ├── data_quality_report.md
-│   ├── query_optimization_report.md
-│   └── schema_erd.png
+│   └── query_optimization_report.md
 │
 └── results/
     ├── key_insights.md
@@ -165,29 +239,27 @@ airline-analytics-p1/
 ## 🚀 How to Reproduce
 
 ### 1. Get the data
-Go to https://www.transtats.bts.gov and download the On-Time Performance
-dataset for 2025. Save as `bts_ontime_2025.csv` in a Google Drive folder
-called `P1_Airline`.
+Download the BTS On-Time Performance dataset for 2025 from https://www.transtats.bts.gov and save it as `bts_ontime_2025.csv` in a Google Drive folder.
 
 ### 2. Set up Neon PostgreSQL
-Create a free account at https://neon.tech and create a project called
-`airline-analytics`. Copy your connection string.
+Create a free project at https://neon.tech and copy your connection string.
 
 ### 3. Run the ETL notebook
-Open `notebooks/01_etl_pipeline.ipynb` in Google Colab. Mount your Drive,
-enter your Neon password when prompted, and run all cells top to bottom.
-Expected runtime: 15–25 minutes.
+Open `notebooks/01_etl_pipeline.ipynb` in Google Colab, mount Drive, enter your Neon connection string (via Colab Secrets), and run all cells. Expected runtime: 15–25 minutes.
 
 ### 4. Run data quality checks
-Open `notebooks/02_data_quality.ipynb` and run all 8 cells. All checks
-should pass with 0 nulls, 0 duplicates, and full referential integrity.
+Open `notebooks/02_data_quality.ipynb` and run all cells — all checks should pass with 0 nulls, 0 duplicates, full referential integrity.
 
 ### 5. Run SQL analytics
-Connect any SQL client to your Neon database and run the files in the
-`sql/` folder in numbered order.
+Connect any SQL client to your Neon database and run the files in `SQL/` in numbered order.
 
-> ⚠️ Never commit your Neon connection string or password to GitHub.
-> The notebooks use `getpass` so credentials are never stored in code.
+### 6. Run EDA and ML notebooks
+Open `notebooks/03_deep_eda.ipynb` and `notebooks/04_delay_prediction_model.ipynb` and run top to bottom.
+
+### 7. Open the Power BI dashboard
+Open the `.pbix` file in Power BI Desktop, point it at your Neon connection string, and refresh.
+
+> ⚠️ Never commit your Neon connection string or password to GitHub. Notebooks use `getpass`/Colab Secrets so credentials are never stored in code.
 
 ---
 
@@ -196,9 +268,9 @@ Connect any SQL client to your Neon database and run the files in the
 **Rishi Patel**
 Aspiring Data Analyst | SQL • Python • Power BI
 📧 codewithrishi01@gmail.com
-🔗 LinkedIn: linkedin.com/in/rishipatel01
+🔗 [LinkedIn](https://linkedin.com/in/rishipatel01)
+🔗 [GitHub](https://github.com/RishiiiiPatel06)
 
 ---
 
-*Dataset: Bureau of Transportation Statistics, US Department of Transportation.
-All analysis performed on publicly available open government data.*
+*Dataset: Bureau of Transportation Statistics, US Department of Transportation. All analysis performed on publicly available open government data.*
