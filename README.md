@@ -13,7 +13,7 @@
 | Phase 1 | Data Setup & ETL | ✅ Complete |
 | Phase 2 | SQL Analytics | ✅ Complete |
 | Phase 3 | Power BI Dashboard | ✅ Upcoming |
-| Phase 4 | ML Delay Prediction | ⬜ Upcoming |
+| Phase 4 | ML Delay Prediction | ✅ Upcoming |
 | Phase 5 | GitHub Portfolio | ⬜ Upcoming |
 
 ---
