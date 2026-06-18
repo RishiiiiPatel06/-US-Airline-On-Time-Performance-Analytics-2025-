@@ -91,22 +91,21 @@ AIRPORTS ───────────────────────�
 
 ## 🔄 ETL Pipeline
 
-**File:** `notebooks/01_etl_pipeline.ipynb`
+File: notebooks/01_etl_pipeline.ipynb
 
-The pipeline runs in 6 steps:
+Mount Google Drive and connect to Neon PostgreSQL
+Select 23 of 38 raw BTS columns needed for analysis
+Chunked CSV reading (100K rows at a time) to avoid RAM overflow on a 1.3 GB file
+Clean — rename columns, parse dates, fill missing delay-cause values with 0 (no delay ≠ missing data), drop true nulls
+Transform flat CSV into 4 normalized tables (carriers, airports, flights, delays)
+Push to PostgreSQL in chunks of 10K rows
 
-1. **Mount** Google Drive and connect to Neon PostgreSQL
-2. **Configure** — select 23 of 38 raw columns needed for analysis
-3. **Load** — chunked CSV reading (100K rows at a time) to avoid RAM overflow
-4. **Clean** — rename columns, fix dates, fill NaN delays with 0, drop nulls
-5. **Transform** — build 4 normalized tables from flat CSV
-6. **Push** — write to PostgreSQL in chunks of 10K rows
 
-**Key decisions made:**
-- Used `chunksize=100_000` to handle 1.3 GB file without memory crash
-- Filled NaN delay columns with 0 (no delay = 0 minutes, not missing)
-- Used `random_state=42` for reproducible monthly sampling
-- Passwords handled via `getpass` — never stored in code
+Key decisions:
+
+random_state=42 for reproducible monthly stratified sampling
+Credentials handled via getpass / Colab Secrets — never hardcoded
+NaN delay-cause columns filled with 0, since a null there means "not a contributing cause," not missing data
 
 ---
 
